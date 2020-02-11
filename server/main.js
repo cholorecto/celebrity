@@ -43,4 +43,28 @@ Meteor.startup(() => {
       }))
     }
   })
+
+  WebApp.connectHandlers.use(bodyParser.json())
+  .use(bodyParser.urlencoded({ extended: true}))
+  .use('/update', (req,res,next) => {
+
+    if(req.method !== 'PUT') {
+      next()
+    } else {
+      const { body } = req
+      
+      const resp = Celebrities.update(
+        { _id: body._id },
+        {
+          first_name: body.first_name,
+          last_name: body.last_name,
+          middle_name: body.middle_name,
+          contact_number: body.contact_number,
+          address: body.address,
+          gender: body.gender
+        }
+     )
+      res.end(JSON.stringify(resp))
+    }
+  })
 });
