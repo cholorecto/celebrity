@@ -67,4 +67,17 @@ Meteor.startup(() => {
       res.end(JSON.stringify(resp))
     }
   })
+
+  WebApp.connectHandlers.use(bodyParser.json())
+  .use(bodyParser.urlencoded({ extended: true}))
+  .use('/delete', (req,res,next) => {
+
+    if(req.method !== 'DELETE') {
+      next()
+    } else {
+      const { body } = req
+      const resp = Celebrities.remove(body._id)
+      res.end(JSON.stringify(resp))
+    }
+  })
 });
